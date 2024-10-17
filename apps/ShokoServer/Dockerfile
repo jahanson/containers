@@ -7,6 +7,7 @@ ARG CHANNEL
 ARG TAG
 ARG TARGETPLATFORM
 ARG COMMIT
+ARG WEBUI_VERSION
 
 SHELL ["/bin/ash", "-o", "pipefail", "-c"]
 #hadolint ignore=DL3018
@@ -16,6 +17,7 @@ RUN apk add --no-cache \
         git \
         jo \
         jq \
+        libarchive-tools \
     && \
     case "${TARGETPLATFORM}" in \
         'linux/amd64') export ARCH='x64' ;; \
@@ -32,6 +34,8 @@ RUN apk add --no-cache \
         -o /app/bin \
         /p:Version="${VERSION}" \
         /p:InformationalVersion="channel=${CHANNEL},commit=${COMMIT},tag=${TAG},date=${DATE}" \
+    && curl -fsSL "https://github.com/ShokoAnime/Shoko-WebUI/releases/download/v${WEBUI_VERSION}/Shoko-WebUI-v${WEBUI_VERSION}.zip" \
+        | bsdtar -xf- -C /app/bin/webui \
     && chown -R root:root /app && chmod -R 755 /app \
     && rm -rf /tmp/*
 
