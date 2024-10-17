@@ -67,6 +67,7 @@ RUN \
         jq \
         libarchive-tools \
         libintl \
+        mediainfo \
         nano \
         sqlite-libs \
         trurl \
